@@ -117,16 +117,16 @@ cloudmind/
 ## Usage Instructions
 1. Start the server:
 ```bash
-node server.js
+node cloudMind.js
 ```
 2. Launch the CLI:
 ```bash
-node cloudmind-cli.js
+node cloudMindCLI.js
 ```
 3. Send test prompts or activate autonomous mode
 4. (Optional) Run the message monitor:
 ```bash
-node cloudmind-router-watch.js
+node cloudMindRtWatch.js
 ```
 
 ---
