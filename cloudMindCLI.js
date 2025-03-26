@@ -18,8 +18,8 @@ const TRANSLATOR_NODE = 'core:trn:main';
 const commands = {
   help: () => {
     console.log(`\nAvailable Commands:
-  start : autonomous       => Enables autonomous mode
-  start : manual           => Disables autonomous mode
+  start -a       => Enables autonomous mode
+  start -m          => Disables autonomous mode
   status                   => Show current system status
   halt -a                  => Alias for manual mode
   send -f [file] -n [node] => Send JSON file to node

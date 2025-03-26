@@ -1,171 +1,150 @@
 # CloudMind Communication Server
 
-> Version: **v0.93**\
-> Author: *Christian Parks*\
-> Purpose: A modular LLM relay system for coordinating multi-agent communication, with autonomous and manual workflows.
+**Version:** v0.93  
+**Author:** *Christian Parks*  
+**Description:** A modular communication server designed to orchestrate intelligent interactions among multiple OpenAI Assistant agents through a message-driven architecture.
 
 ---
 
 ## Overview
+CloudMind is a flexible relay server enabling structured communication between various AI agents using the OpenAI Assistant API. It simulates a multi-agent environment with message routing, audits, and dynamic behavior regulation. It supports both autonomous execution and human-guided interaction.
 
-CloudMind is a **modular relay server** that manages communication between multiple AI nodes (via OpenAI Assistant API). It features:
+---
 
-- Dynamic message routing between nodes
-- Auditing and governance through demerits and validation logic
-- Hybrid support for both human input and full automation
-- Structured messaging protocol with types like `nudge`, `init`, `ack`, and `demerit`
-
-Think of it as a programmable, self-moderating network of AI agents working together.
+## Features
+- Dynamic routing between multiple LLM nodes
+- Structured messaging protocol using JSON
+- Built-in auditing, error correction, and demerit logic
+- Manual and autonomous operational modes
+- CLI interface and real-time message log monitoring
 
 ---
 
 ## Architecture
+CloudMind runs on Node.js with Express and consists of the following key components:
 
-CloudMind runs a local `express` server that:
-
-- Registers AI nodes, each mapped to a unique OpenAI Assistant
-- Handles message validation, routing, logging, and protocol enforcement
-- Supports an autonomous mode where nodes interact independently
-- Uses a translator node to convert user prompts into CloudMind-compliant format
+- **Node Registry:** Tracks available nodes and their OpenAI Assistant IDs
+- **Message Router:** Handles validation and delivery between agents
+- **Audit System:** Governs compliance, routing violations, and corrective actions
+- **CLI Interface:** Allows developers to interact, control, and observe node behavior
 
 ---
 
-## Key Components
+## Message Structure
+All communication follows a defined JSON schema, containing:
+- `header`: Metadata including sender, receiver, ID, and type
+- `intent`: Instructions or desired action
+- `resources`: Optional contextual information
+- `audit`: Audit requirements and expected schemas
+- `trace`: Information for thread linkage and origin tracking
 
-### Node Registry
+---
 
-Centralized record of active nodes:
-
-```js
-'core:llm:alpha01': { status: 'online', assistant_id: '...' }
-```
-
-Each node includes its role, assistant ID, and current status.
-
-### Message Protocol
-
-Messages follow a structured format with headers, intent, resources, audit status, and trace data. Supported types include:
-
-- `init`
-- `nudge`
-- `ack`
-- `demerit`
-- `task_response`
-
-### API Endpoints
-
-| Route                    | Description                                                            |
-| ------------------------ | ---------------------------------------------------------------------- |
-| `POST /broadcast`        | Send a message to all nodes                                            |
-| `POST /send`             | Send a message to a specific node                                      |
-| `POST /register`         | Register a new node                                                    |
-| `GET /messages`          | Retrieve full message log                                              |
-| `GET /nodes`             | Retrieve current node registry                                         |
-| `POST /translator-relay` | Use a translator assistant to convert human prompt to CloudMind format |
-| `POST /autonomous-mode`  | Toggle autonomous interaction                                          |
-| `POST /node-communicate` | Main endpoint for threaded, retryable messaging                        |
+## Endpoints
+| Endpoint                  | Functionality                                  |
+|--------------------------|-----------------------------------------------|
+| `POST /broadcast`        | Sends a message to all nodes in the registry  |
+| `POST /send`             | Direct message to a specific node             |
+| `POST /register`         | Register or update a node                     |
+| `GET /messages`          | View current message log                      |
+| `GET /nodes`             | View active nodes                             |
+| `POST /translator-relay` | Use a translator node to convert human prompts|
+| `POST /autonomous-mode`  | Toggle autonomous system behavior             |
+| `POST /node-communicate` | Main message interface for node interaction   |
 
 ---
 
 ## Autonomous Mode
+When enabled, the network functions independently:
+1. Initiation begins with an `init` message from the audit node
+2. Nodes exchange messages based on assigned roles
+3. Malfunctions trigger audits, nudges, or demerits
 
-When turned ON:
-
-1. Auditor node (`core:aud:audit01`) triggers an `init` message to conduit (`core:gen:conduit`)
-2. Nodes exchange messages automatically
-3. Failed or malformed responses are flagged with demerits and retried or nudged
-
----
-
-## Translator Flow
-
-Used for converting manual input into structured node messages:
-
-1. User sends prompt to `core:trn:main`
-2. Translator builds a CloudMind-formatted JSON message
-3. Auditor validates the message
-4. If approved, it gets routed to the appropriate node
+This mode is useful for observing emergent behavior in agent interactions.
 
 ---
 
-## Message Governance
-
-The server enforces several rules to maintain order:
-
-- **Ack cooldowns** prevent feedback loops
-- **Audit logic** handles message validation and enforcement
-- **Routing rules** disallow improper destinations (e.g. translator as a relay)
-- **Nudges** are sent when output is too vague or non-compliant
+## Command-Line Interface (`cloudMindCLI.js`)
+This CLI lets developers interact with the CloudMind server:
+```bash
+start -a         # Enable autonomous mode
+start -m             # Disable autonomous mode
+status                     # Check server health and node list
+send -f <file> -n <node>   # Send a structured message to a node
+chat                       # Chat using the translator node
+```
 
 ---
 
-## System Behavior Examples
+## Router Watch (`cloudMindRtwatch.js`)
+This monitoring tool provides a live stream of inter-node communications. 
+Ideal for debugging, traffic analysis, or studying node behavior in real time.
 
-CloudMind is designed for emergent behavior. Some observed examples:
+---
 
-- A node dynamically escalated to a human operator after repeated message failures
-- Auditor issued a demerit and shared its reasoning with other nodes
-- Conduit generated a message suggesting creation of a missing node when a destination wasn't found
+## Example Behaviors
+- Nodes request human intervention for complex tasks
+- Improper parsing is flagged and logged via demerits
+- Unknown node destinations return constructive feedback to the sender
 
-These behaviors emerged from the system design without hardcoding.
+These behaviors emerge from the message protocol and node logic.
 
 ---
 
 ## Requirements
-
-- Node.js
+- Node.js (v16+ recommended)
 - Express
 - Axios
 - dotenv
-- OpenAI API key (Assistants v2)
-- Pre-created OpenAI Assistants tied to roles in `.env`
+- OpenAI Assistants v2 API access
 
 ---
 
 ## File Structure
-
 ```
 cloudmind/
-├── utils.js
-├── server.js      // Main server file
-├── .env           // API keys and assistant IDs
-├── README.md      // This file
+├── server.js                  # Main communication server
+├── cloudmind-cli.js           # CLI for interacting with server
+├── cloudmind-router-watch.js  # Real-time router log visualizer
+├── utils.js                   # Utilities for retries and polling
+├── .env                       # API keys (not included in version control)
+├── .env.example               # Template for environment setup
+├── README.md                  # Documentation (this file)
 ```
 
 ---
 
-## Getting Started
-
-- Run the server: `node server.js`
-- Use `POST /translator-relay` to input prompts
-- Toggle autonomy with `POST /autonomous-mode`
-- Monitor logs for node interactions, audit results, and message traces
+## Usage Instructions
+1. Start the server:
+```bash
+node server.js
+```
+2. Launch the CLI:
+```bash
+node cloudmind-cli.js
+```
+3. Send test prompts or activate autonomous mode
+4. (Optional) Run the message monitor:
+```bash
+node cloudmind-router-watch.js
+```
 
 ---
 
-## Roadmap
-
-Future directions for CloudMind:
-
-- `core:prc:compile`: Consensus-driven code compilation from multiple nodes
-- `core:cmp:ubu`: Execute validated code on a real Ubuntu shell
-- Networked CloudMind instances on the same subnet
-- UI dashboard for monitoring node interactions
-- Per-node reputation tracking
+## Planned Features (v1.0 and beyond)
+- Compiler node (`core:prc:compile`) for safe code generation
+- Execution node (`core:cmp:ubu`) connected to a Linux shell
+- Interconnected CloudMind clusters
+- Agent scoring and voting protocols
+- Visual web-based interface for message flows
 
 ---
 
 ## Disclaimer
-
-This is an experimental project showcasing agent coordination, protocol handling, and emergent behavior in AI networks. Use responsibly. Not intended for production or sensitive tasks.
-
----
-
-## Final Notes
-
-CloudMind is a creative sandbox for structured AI coordination. If you're into LLMs, distributed systems, or AI governance — this one's for you.
+This project is for research, experimentation, and exploration of modular AI systems. It is not intended for use in production environments or with sensitive information.
 
 ---
 
-**MIT License** • Built for curiosity and control
+## License
+MIT License — Contributions welcome
 
