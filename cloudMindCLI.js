@@ -90,8 +90,8 @@ rl.on('line', async (line) => {
 
   if (trimmed === 'help') return commands.help();
   if (trimmed === 'status') return commands.status();
-  if (trimmed === 'start : autonomous') return commands.setAutonomy(true);
-  if (trimmed === 'start : manual' || trimmed === 'halt -a') return commands.setAutonomy(false);
+  if (trimmed === 'start -a') return commands.setAutonomy(true);
+  if (trimmed === 'start -m' || trimmed === 'halt -a') return commands.setAutonomy(false);
   if (trimmed === 'chat') return commands.chatWithTranslator();
 
   const sendMatch = trimmed.match(/send -f (.+) -n (.+)/);
