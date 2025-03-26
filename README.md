@@ -115,6 +115,8 @@ cloudmind/
 ---
 
 ## Usage Instructions
+Note: For prompts or prompt engineering advice, refer to the <a href="https://github.com/CP-1998/cloudMind/discussions/2">Discussion post</a>.
+
 1. Start the server:
 ```bash
 node cloudMind.js
