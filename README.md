@@ -133,6 +133,12 @@ node cloudMindRtWatch.js
 ```
 
 ---
+## What you can expect from the current version
+Currently you can expect to see:
+- Autonomous communication amongst nodes
+- Emergent behavior, like nodes bumping into repeated audits, and looking for ways to either A. Self-correct or B. Get around the audits entirely
+- Inter-node task sharing (Very primitive thus far, but an interesting research point)
+---
 
 ## Planned Features (v1.0 and beyond)
 - Compiler node (`core:prc:compile`) for safe code generation
@@ -140,11 +146,15 @@ node cloudMindRtWatch.js
 - Interconnected CloudMind clusters
 - Agent scoring and voting protocols
 - Visual web-based interface for message flows
+- Multi-Layered MongoDB implementation for persisten system memory, and node-specific memory.
+- Remote code and command execution in a containerized Ubuntu machine.
+- Robust system functions to be provided to the OpenAI assistants for server-wide abilities and simplification of jobs commonly performed by nodes (this will give them context and the ability to use tools to gain and manipulate system context, and eventually request for new tools to be crafted for them.)
 
 ---
 
 ## Disclaimer
-This project is for research, experimentation, and exploration of modular AI systems. It is not intended for use in production environments or with sensitive information.
+This project is for research, experimentation, and exploration of modular AI systems. It is not intended for use in production environments or with sensitive information. I urge caution with how you choose to
+implement this work. Seriously consider containerization if you decide to grant this system access to external tools.
 
 ---
 
