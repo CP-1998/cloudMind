@@ -1,7 +1,7 @@
 # CloudMind Communication Server
 [![cloud-Mind.jpg](https://i.postimg.cc/XvWT0BfW/cloud-Mind.jpg)](https://postimg.cc/CRvvG1rr)
 
-**Version:** v0.93  
+**Version:** v0.94  
 **Author:** *Christian Parks*  
 **Description:** A modular communication server designed to orchestrate intelligent interactions among multiple OpenAI Assistant agents through a message-driven architecture.
 
