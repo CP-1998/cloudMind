@@ -1,4 +1,5 @@
 # CloudMind Communication Server
+[![cloud-Mind.jpg](https://i.postimg.cc/XvWT0BfW/cloud-Mind.jpg)](https://postimg.cc/CRvvG1rr)
 
 **Version:** v0.93  
 **Author:** *Christian Parks*  
@@ -96,7 +97,7 @@ These behaviors emerge from the message protocol and node logic.
 - Express
 - Axios
 - dotenv
-- OpenAI Assistants v2 API access
+- OpenAI Assistants v2 API access (You will need to create your own OpenAI assistants for this project. I highly suggest referring to my prompts in the <a href="https://github.com/CP-1998/cloudMind/discussions/2">Source Prompts</a> discussion post for which you can either use or base your own prompts from. Get creative with it! Keep in mind if you allow too much deviation from the CM-JS format, you run the risk of never ending parsing errors. You've been warned!)
 
 ---
 
@@ -115,20 +116,28 @@ cloudmind/
 ---
 
 ## Usage Instructions
+Note: For prompts or prompt engineering advice, refer to the <a href="https://github.com/CP-1998/cloudMind/discussions/2">Discussion post</a>.
+
 1. Start the server:
 ```bash
-node server.js
+node cloudMind.js
 ```
 2. Launch the CLI:
 ```bash
-node cloudmind-cli.js
+node cloudMindCLI.js
 ```
 3. Send test prompts or activate autonomous mode
 4. (Optional) Run the message monitor:
 ```bash
-node cloudmind-router-watch.js
+node cloudMindRtWatch.js
 ```
 
+---
+## What you can expect from the current version
+Currently you can expect to see:
+- Autonomous communication amongst nodes
+- Emergent behavior, like nodes bumping into repeated audits, and looking for ways to either A. Self-correct or B. Get around the audits entirely
+- Inter-node task sharing (Very primitive thus far, but an interesting research point)
 ---
 
 ## Planned Features (v1.0 and beyond)
@@ -137,11 +146,15 @@ node cloudmind-router-watch.js
 - Interconnected CloudMind clusters
 - Agent scoring and voting protocols
 - Visual web-based interface for message flows
+- Multi-Layered MongoDB implementation for persisten system memory, and node-specific memory.
+- Remote code and command execution in a containerized Ubuntu machine.
+- Robust system functions to be provided to the OpenAI assistants for server-wide abilities and simplification of jobs commonly performed by nodes (this will give them context and the ability to use tools to gain and manipulate system context, and eventually request for new tools to be crafted for them.)
 
 ---
 
 ## Disclaimer
-This project is for research, experimentation, and exploration of modular AI systems. It is not intended for use in production environments or with sensitive information.
+This project is for research, experimentation, and exploration of modular AI systems. It is not intended for use in production environments or with sensitive information. I urge caution with how you choose to
+implement this work. Seriously consider containerization if you decide to grant this system access to external tools.
 
 ---
 
