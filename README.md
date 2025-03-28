@@ -97,7 +97,7 @@ These behaviors emerge from the message protocol and node logic.
 - Express
 - Axios
 - dotenv
-- OpenAI Assistants v2 API access
+- OpenAI Assistants v2 API access (You will need to create your own OpenAI assistants for this project. I highly suggest referring to my prompts in the <a href="https://github.com/CP-1998/cloudMind/discussions/2">Source Prompts</a> discussion post for which you can either use or base your own prompts from. Get creative with it! Keep in mind if you allow too much deviation from the CM-JS format, you run the risk of never ending parsing errors. You've been warned!)
 
 ---
 
